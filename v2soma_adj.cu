@@ -6,10 +6,12 @@
 
 // codigo device
 __global__ void soma_adj(int *a){
+   
     int ind = threadIdx.x;
     int pos_inicio = ind - I;
     int pos_final = ind + I + 1;
     int soma = 0;
+  
     if (ind < N){
       for (int i=pos_inicio; i<pos_final; i++){
         if (i >= 0 && i < N)
@@ -45,7 +47,7 @@ int main(){
 
   // Visualizando o resultado
   for (int i=0; i<N; i++)
-    printf("%d \n", a[i]);
+    printf("%d ", a[i]);
 
   // Liberando a memoria na GPU
   cudaFree(dev_a);
