@@ -10,7 +10,7 @@ __global__ void soma_adj(int *a, int *b){
     __shared__ int temp[N];
     int ind = threadIdx.x;
     int pos_inicio = ind - I;
-    int pos_final = ind + I +1;
+    int pos_final = ind + I + 1;
 
     if (ind < N){
       int soma = 0;
@@ -23,7 +23,6 @@ __global__ void soma_adj(int *a, int *b){
 
     b[ind] = temp[ind];
 }
-
 
 
 
@@ -52,9 +51,13 @@ int main(){
   // Copiando o resultado da GPU para CPU
   cudaMemcpy(&b, dev_b, N*sizeof(int), cudaMemcpyDeviceToHost);
 
-  // Visualizando o resultado
   for (int i=0; i<N; i++)
-    printf("%d \n", b[i]);
+    printf("%d ", a[i]);
+  printf("\n");
+  
+   // Visualizando o resultado
+  for (int i=0; i<N; i++)
+    printf("%d ", b[i]);
 
   // Liberando a memoria na GPU
   cudaFree(dev_a);
