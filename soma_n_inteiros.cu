@@ -5,13 +5,13 @@
 #define I 32  // intervalo
 
 // codigo device
-__global__ void soma_numeros(int *a, int *res){
+__global__ void soma_numeros(int *a, int *res) {
 
   __shared__ int temp[N/I];
 
   int ind = threadIdx.x;
+ 
   if (ind < N/I){
-
     int soma = 0;
     for (int i = I*ind; i < I*ind + I; i++)
       soma += a[i];
@@ -23,6 +23,7 @@ __global__ void soma_numeros(int *a, int *res){
   int resto;
   int controle = I;
   int somaThreads = 0;
+ 
   while (controle <= N) {
     if (ind < N/controle/I) {
       for (int i = I*ind; i<I*ind+I; i++)
@@ -30,22 +31,22 @@ __global__ void soma_numeros(int *a, int *res){
     temp[ind] = somaThreads;
     somaThreads = 0;
     }
+    
     resto=N/controle;
     if (resto == 0)
       resto = 1;
     controle *= I;
 }
+  
   __syncthreads();
-if (ind == 0){
-  printf("%d", resto);
-  *res = 0;
-  for (int i = 0; i < resto; i++) {
-    *res += temp[i];
+  
+  if (ind == 0){
+    printf("%d", resto);
+    *res = 0;
+    for (int i = 0; i < resto; i++) {
+      *res += temp[i];
+    }
   }
-}
-  // for (int i =0; i<N/I; i++)
-  //   printf("%d ", temp[i]);
-  //   printf("\n");
 }
 
 // Código host
@@ -77,7 +78,7 @@ int main(){
   cudaMemcpy(&r, dev_r, sizeof(int), cudaMemcpyDeviceToHost);
 
   // Visualizando o resultado
-  printf("R: %d\n", r);
+  printf("R = %d\n", r);
 
   // Liberando a memoria na GPU
   cudaFree(dev_a);
